@@ -1,6 +1,7 @@
 # httpbox
 [![Build Status](https://travis-ci.org/detro/httpbox.svg?branch=master)](https://travis-ci.org/detro/httpbox)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdetro%2Fhttpbox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdetro%2Fhttpbox?ref=badge_shield)
 
 `httpbox` is a Command line HTTP client that aims to be as feature rich as your shell scripting skills can handle.
 
@@ -66,3 +67,5 @@ There is nothing special in how to compile `httpbox` compared to any other Rust 
 ## License
 
 [Apache License 2.0](./LICENSE) ([official page](https://www.apache.org/licenses/LICENSE-2.0))
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdetro%2Fhttpbox.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdetro%2Fhttpbox?ref=badge_large)
