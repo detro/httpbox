@@ -30,9 +30,13 @@ matrix:
       os: osx
       rust: stable
     # Windows 32 and 64 bit
-    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-pc-windows-gnu       RELEASE_PKG=httpbox-i686-windows.tgz      ARTIFACT=httpbox.exe
+    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-pc-windows-msvc       RELEASE_PKG=httpbox-i686-windows-cross.tgz      ARTIFACT=httpbox.exe
       rust: stable
-    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=x86_64-pc-windows-gnu     RELEASE_PKG=httpbox-x86_64-windows.tgz    ARTIFACT=httpbox.exe
+    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=x86_64-pc-windows-msvc     RELEASE_PKG=httpbox-x86_64-windows-cross.tgz    ARTIFACT=httpbox.exe
+      rust: stable
+    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=i686-pc-windows-msvc       RELEASE_PKG=httpbox-i686-windows-cargo.tgz      ARTIFACT=httpbox.exe
+      rust: stable
+    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-pc-windows-msvc     RELEASE_PKG=httpbox-x86_64-windows-cargo.tgz    ARTIFACT=httpbox.exe
       rust: stable
     # ------------------------------------ Beta channel builds
     # Beta builds
