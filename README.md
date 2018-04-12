@@ -1,5 +1,6 @@
 # httpbox
 [![Build Status](https://travis-ci.org/detro/httpbox.svg?branch=master)](https://travis-ci.org/detro/httpbox)
+[![Build status](https://ci.appveyor.com/api/projects/status/3eb7t3p26syiugqq/branch/master?svg=true)](https://ci.appveyor.com/project/detro/httpbox/branch/master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdetro%2Fhttpbox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdetro%2Fhttpbox?ref=badge_shield)
 

@@ -1,0 +1,62 @@
+image: Visual Studio 2017
+
+cache:
+  - C:\Users\appveyor\.cargo\registry
+  - target
+
+environment:
+  global:
+    ARTIFACT: httpbox.exe #< By default, artifact is named 'httpbox.exe', same as defined in 'Cargo.toml'
+    RELEASE_PKG: none     #< By default, nothing gets released
+    RUST_CHANNEL: stable  #< By default, build against 'stable' Rust
+
+  matrix:
+    # ------------------------------------ Stable channel builds
+    # Windows GNU MinGW, 32 and 64 bit
+    - RUST_TARGET: i686-pc-windows-gnu
+      RELEASE_PKG: httpbox-i686-windows-gnu.zip
+    - RUST_TARGET: x86_64-pc-windows-gnu
+      RELEASE_PKG: httpbox-x86_64-windows-gnu.zip
+    # Windows MSVC, 32 and 64 bit
+    - RUST_TARGET: i686-pc-windows-msvc
+      RELEASE_PKG: httpbox-i686-windows-msvc.zip
+    - RUST_TARGET: x86_64-pc-windows-msvc
+      RELEASE_PKG: httpbox-x86_64-windows-msvc.zip
+    # ------------------------------------ Nightly channel builds
+    # Testing nightly channels, 64 bit
+    - RUST_TARGET: x86_64-pc-windows-gnu
+      RUST_CHANNEL: nightly
+    - RUST_TARGET: x86_64-pc-windows-msvc
+      RUST_CHANNEL: nightly
+
+install:
+  - ps: |
+      If ($Env:TARGET -eq 'x86_64-pc-windows-gnu') {
+        $Env:PATH += ';C:\msys64\mingw64\bin'
+      } ElseIf ($Env:TARGET -eq 'i686-pc-windows-gnu') {
+        $Env:PATH += ';C:\msys64\mingw32\bin'
+      }
+  - cmd: |
+      curl -sSf -o rustup-init.exe https://win.rustup.rs/
+      rustup-init.exe -y --default-host %RUST_TARGET% --default-toolchain %RUST_CHANNEL%
+      set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+      rustc -Vv
+      cargo -V
+
+build:
+  - cmd: |
+      cargo build --target %RUST_TARGET% --release
+      dir target\%RUST_TARGET%
+
+
+#before_deploy:
+#- ps:
+#deploy:
+#- provider: GitHub
+#  auth_token:
+#    secure: jdS71NMGKaLOl0/mhVj3BA==
+#  on:
+#    branch: master
+#    RELEASE: true
+#after_deploy:
+#- ps:

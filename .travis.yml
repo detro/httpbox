@@ -17,36 +17,25 @@ env:
 matrix:
   include:
     # ------------------------------------ Stable channel builds
-    # Linux 32 and 64 bit
+    # Linux, 32 and 64 bit
     - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-unknown-linux-gnu    RELEASE_PKG=httpbox-i686-linux-gnu.tgz
       rust: stable
     - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-unknown-linux-gnu  RELEASE_PKG=httpbox-x86_64-linux-gnu.tgz
       rust: stable
-    # Mac OS X 32 and 64 bit
+    # Mac OS X, 32 and 64 bit
     - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=i686-apple-darwin         RELEASE_PKG=httpbox-i686-macosx.tgz
       os: osx
       rust: stable
     - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-apple-darwin       RELEASE_PKG=httpbox-x86_64-macosx.tgz
       os: osx
       rust: stable
-    # Windows 32 and 64 bit
-    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-pc-windows-msvc       RELEASE_PKG=httpbox-i686-windows-cross.tgz      ARTIFACT=httpbox.exe
-      rust: stable
-    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=x86_64-pc-windows-msvc     RELEASE_PKG=httpbox-x86_64-windows-cross.tgz    ARTIFACT=httpbox.exe
-      rust: stable
-    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=i686-pc-windows-msvc       RELEASE_PKG=httpbox-i686-windows-cargo.tgz      ARTIFACT=httpbox.exe
-      rust: stable
-    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-pc-windows-msvc     RELEASE_PKG=httpbox-x86_64-windows-cargo.tgz    ARTIFACT=httpbox.exe
-      rust: stable
-    # ------------------------------------ Beta channel builds
-    # Beta builds
-    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-unknown-linux-gnu
-      rust: beta
+    # ------------------------------------ Nightly channel builds
+    # Testing nightly channels, 64 bit
     - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-unknown-linux-gnu
-      rust: beta
+      rust: nightly
     - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-apple-darwin
       os: osx
-      rust: beta
+      rust: nightly
 
 install: |
   ./.travis.scripts/setup.sh
