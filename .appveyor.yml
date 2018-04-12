@@ -1,3 +1,4 @@
+version: '{build}'
 image: Visual Studio 2017
 
 cache:
@@ -43,7 +44,10 @@ install:
       rustc -Vv
       cargo -V
 
-build:
+# Building is done in the test phase, so we disable Appveyor build phase.
+build: false
+
+test_script:
   - cmd: |
       cargo build --target %RUST_TARGET% --release
       dir target\%RUST_TARGET%
