@@ -18,15 +18,15 @@ matrix:
   include:
     # ------------------------------------ Stable channel builds
     # Linux, 32 and 64 bit
-    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-unknown-linux-gnu    RELEASE_PKG=httpbox-i686-linux-gnu.tgz
+    - env: RUST_BUILD_TOOL=cross  RUST_TARGET=i686-unknown-linux-gnu    RELEASE_PKG=httpbox-linux-i686.tgz
       rust: stable
-    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-unknown-linux-gnu  RELEASE_PKG=httpbox-x86_64-linux-gnu.tgz
+    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-unknown-linux-gnu  RELEASE_PKG=httpbox-linux-x86_64.tgz
       rust: stable
     # Mac OS X, 32 and 64 bit
-    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=i686-apple-darwin         RELEASE_PKG=httpbox-i686-macosx.tgz
+    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=i686-apple-darwin         RELEASE_PKG=httpbox-macosx-i686.tgz
       os: osx
       rust: stable
-    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-apple-darwin       RELEASE_PKG=httpbox-x86_64-macosx.tgz
+    - env: RUST_BUILD_TOOL=cargo  RUST_TARGET=x86_64-apple-darwin       RELEASE_PKG=httpbox-macosx-x86_64.tgz
       os: osx
       rust: stable
     # ------------------------------------ Nightly channel builds
@@ -38,10 +38,33 @@ matrix:
       rust: nightly
 
 install: |
-  ./.travis.scripts/setup.sh
+  if [ "${RUST_BUILD_TOOL}" = "cargo" ]; then
+      echo "Updating rustup"
+      rustup self update
+
+      echo "Setting up build target for '${RUST_TARGET}' if necessary"
+      rustup target add ${RUST_TARGET} || true
+  elif [ "${RUST_BUILD_TOOL}" = "cross" ]; then
+      echo "Installing cross (if absent) (see https://github.com/japaric/cross)"
+      cargo install --list | grep cross || cargo install cross
+  else
+      echo "Invalid value for RUST_BUILD_TOOL='${RUST_BUILD_TOOL}': aborting!"
+      exit 1
+  fi
 
 script: |
-  ./.travis.scripts/build.sh
+  echo "Building release for '${RUST_TARGET}' using '${RUST_BUILD_TOOL}'"
+  ${RUST_BUILD_TOOL} build --target ${RUST_TARGET} --release
+
+  if [ "none" != "${RELEASE_PKG}" ]; then
+      echo "Packaging artifact '${ARTIFACT}' into '${RELEASE_PKG}'"
+      tar -C target/${RUST_TARGET}/release/ -czvf ${RELEASE_PKG} ${ARTIFACT}
+
+      echo "Final package content"
+      tar -ztvf ${RELEASE_PKG}
+  else
+      echo "No release package for this build"
+  fi
 
 deploy:
   provider: releases
