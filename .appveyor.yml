@@ -50,12 +50,15 @@ test_script:
       echo * Building release for %RUST_TARGET%
       cargo build --target %RUST_TARGET% --release
 
-      echo * Packaging artifact %ARTIFACT% into %RELEASE_PKG%
-      7z a %RELEASE_PKG% .\target\%RUST_TARGET%\release\%ARTIFACT%
+      if not "%RELEASE_PKG%" == "none" (
+        echo * Packaging artifact %ARTIFACT% into %RELEASE_PKG%
+        7z a %RELEASE_PKG% .\target\%RUST_TARGET%\release\%ARTIFACT%
 
-      echo * Final package content
-      7z l %RELEASE_PKG%
-
+        echo * Final package content
+        7z l %RELEASE_PKG%
+      ) else (
+        echo * No release package for this build
+      )
 
 #before_deploy:
 #- ps:
