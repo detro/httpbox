@@ -50,10 +50,10 @@ test_script:
       cargo build --target %RUST_TARGET% --release
 
       echo Packaging artifact %ARTIFACT% into %RELEASE_PKG%
-      7zip a %RELEASE_PKG% target\%RUST_TARGET%\release\%ARTIFACT%
+      7z a %RELEASE_PKG% target\%RUST_TARGET%\release\%ARTIFACT%
 
       echo Final package content
-      7zip l %RELEASE_PKG%
+      7z l %RELEASE_PKG%
 
 
 #before_deploy:
