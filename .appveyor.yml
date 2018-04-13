@@ -30,14 +30,15 @@ environment:
 
 install:
   - cmd: |
-      echo Installing rustup for Windows
+      @echo off
+      echo * Installing rustup for Windows
       curl -sSf -o rustup-init.exe https://win.rustup.rs/
       rustup-init.exe -y --default-host %RUST_TARGET% --default-toolchain %RUST_CHANNEL%
 
-      echo Adding cargo to PATH
+      echo * Adding cargo to PATH
       set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
 
-      echo Showing versions of rustc and cargo
+      echo * Showing versions of rustc and cargo
       rustc -Vv
       cargo -V
 
@@ -46,13 +47,13 @@ build: false
 
 test_script:
   - cmd: |
-      echo Building release for %RUST_TARGET%
+      echo * Building release for %RUST_TARGET%
       cargo build --target %RUST_TARGET% --release
 
-      echo Packaging artifact %ARTIFACT% into %RELEASE_PKG%
-      7z a %RELEASE_PKG% target\%RUST_TARGET%\release\%ARTIFACT%
+      echo * Packaging artifact %ARTIFACT% into %RELEASE_PKG%
+      7z a %RELEASE_PKG% .\target\%RUST_TARGET%\release\%ARTIFACT%
 
-      echo Final package content
+      echo * Final package content
       7z l %RELEASE_PKG%
 
 
