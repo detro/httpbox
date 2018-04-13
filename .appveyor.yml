@@ -1,0 +1,73 @@
+version: '{build}'
+image: Visual Studio 2017
+
+cache:
+  - C:\Users\appveyor\.cargo\registry
+  - target
+
+#branches:
+#  only:
+#    - /^v\d+\.\d+\.\d+.*$/
+#    - master
+
+environment:
+  global:
+    ARTIFACT: httpbox.exe #< By default, artifact is named 'httpbox.exe', same as defined in 'Cargo.toml'
+    RELEASE_PKG: none     #< By default, nothing gets released
+    RUST_CHANNEL: stable  #< By default, build against 'stable' Rust
+
+  matrix:
+    # ------------------------------------ Stable channel builds
+    # Windows MSVC, 32 and 64 bit
+    - RUST_TARGET: i686-pc-windows-msvc
+      RELEASE_PKG: httpbox-windows-i686.zip
+    - RUST_TARGET: x86_64-pc-windows-msvc
+      RELEASE_PKG: httpbox-windows-x86_64.zip
+    # ------------------------------------ Nightly channel builds
+    # Testing nightly channels, 64 bit
+    - RUST_TARGET: x86_64-pc-windows-msvc
+      RUST_CHANNEL: nightly
+
+install:
+  - cmd: |
+      @echo off
+      echo * Installing rustup for Windows
+      curl -sSf -o rustup-init.exe https://win.rustup.rs/
+      rustup-init.exe -y --default-host %RUST_TARGET% --default-toolchain %RUST_CHANNEL%
+
+      echo * Adding cargo to PATH
+      set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+
+      echo * Showing versions of rustc and cargo
+      rustc -Vv
+      cargo -V
+
+# Building is done in the test phase, so we disable Appveyor build phase.
+build: false
+
+test_script:
+  - cmd: |
+      echo * Building release for %RUST_TARGET%
+      cargo build --target %RUST_TARGET% --release
+
+      if not "%RELEASE_PKG%" == "none" (
+        echo * Packaging artifact %ARTIFACT% into %RELEASE_PKG%
+        7z a %RELEASE_PKG% .\target\%RUST_TARGET%\release\%ARTIFACT%
+
+        echo * Final package content
+        7z l %RELEASE_PKG%
+      ) else (
+        echo * No release package for this build
+      )
+
+#before_deploy:
+#- ps:
+#deploy:
+#- provider: GitHub
+#  auth_token:
+#    secure: jdS71NMGKaLOl0/mhVj3BA==
+#  on:
+#    branch: master
+#    RELEASE: true
+#after_deploy:
+#- ps:
